@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue May 26 20:57:08 2020
+Updated on Thu Dec 09 10:17:30 2021
 
 @author: Ayush Choudhary
 """
@@ -20,15 +21,22 @@ def add_money():
     
 def enter_data():
   if not os.path.exists('data.csv'):
-    with open('data.csv','w') as file:
+    with open('data.csv','w', newline = "") as file:
       writer=csv.writer(file)
       writer.writerow(['Date','Label','Expense'])
+  
+  if os.path.exists('data.csv'):
+    read_file_list = list(csv.reader(open('data.csv','r')))
+    if len(read_file_list) == 0:
+      with open('data.csv','a', newline = "") as file:
+        writer=csv.writer(file)
+        writer.writerow(['Date','Label','Expense'])
 
   date = int(input("Enter the date: "))
   label =input("Label your Expense: ")
   expense= int(input("Expenditure:"))
 
-  with open("data.csv",'a') as file:
+  with open("data.csv",'a', newline="") as file:
     writer=csv.writer(file)
     writer.writerow([date,label,expense])
 
@@ -55,8 +63,13 @@ def data_insights():
     with open('data.csv','r') as file:
       read = csv.reader(file)
       read_list=list(read)
-      #print(read_list)
+      print(read_list)
       total_expense=0
+
+      if(income <= 0):
+        print("!! You don't have any income yet.Add some money first.");
+        return
+
       for each in read_list[1:]:
         total_expense+=int(each[2])
         
@@ -153,5 +166,3 @@ if __name__=="__main__":
     if  ask == 'n' or ask =='N':
       running = False
       
- 
-    
